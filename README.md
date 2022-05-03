@@ -1,8 +1,8 @@
 # OpenSim Python Runner
 OpenSim Python Runner is an open-source library for modeling and simulating the neuromusculoskeletal system developed at Standford university. This Service brings its functionality into [oSparc](https://github.com/ITISFoundation/osparc-simcore/). 
-
+<!---
 #![Github-CI](https://github.com/ITISFoundation/opensim-python-runner/workflows/Github-CI%20Push/PR%20opensim-python-runner/badge.svg)
-
+-->
 ## Description
 
 oSparc Service that allows running any python-based script using the [OpenSim library](https://opensim.stanford.edu/) either as simple script of complex Python application inside a zip file (with or without requirements.txt file).
