@@ -3,11 +3,24 @@ name: build/deploy opensim-python-runner
 on:
   workflow_dispatch:
   push:
-      branches:
-         - "*"
+    branches:
+      - "*"
+    paths-ignore:
+      - "*.md"
+      - "*.png"
+      - "*.svg"
+      - "docs/**"
+      - ".vscode/**"
   pull_request:
-      branches: 
-         - "*"
+    branches: 
+      - "*"
+    paths-ignore:
+      - "*.md"
+      - "*.png"
+      - "*.svg"
+      - "docs/**"
+      - ".vscode/**"
+
 env:
   # secrets can be set in settings/secrets on github
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
