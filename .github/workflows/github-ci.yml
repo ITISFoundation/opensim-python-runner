@@ -3,7 +3,7 @@ name: build/deploy opensim-python-runner
 on:
   push:
     branches:
-      - "*"
+      - [ main ]
     tags-ignore:
       - "*"
     paths-ignore:
@@ -14,7 +14,7 @@ on:
       - ".vscode/**"
   pull_request:
     branches:
-      - "*"
+      - [ main ]
     paths-ignore:
       - "*.md"
       - "*.png"
