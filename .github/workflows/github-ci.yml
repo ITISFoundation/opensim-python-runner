@@ -1,27 +1,11 @@
 name: build/deploy opensim-python-runner
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - [ main ]
-    tags-ignore:
-      - "*"
-    paths-ignore:
-      - "*.md"
-      - "*.png"
-      - "*.svg"
-      - "docs/**"
-      - ".vscode/**"
+      branches: [ master ]
   pull_request:
-    branches:
-      - [ main ]
-    paths-ignore:
-      - "*.md"
-      - "*.png"
-      - "*.svg"
-      - "docs/**"
-      - ".vscode/**"
-      - ".vscode-template/**"
+      branches: [ master ]
 
 env:
   # secrets can be set in settings/secrets on github
