@@ -3,10 +3,11 @@ name: build/deploy opensim-python-runner
 on:
   workflow_dispatch:
   push:
-      branches: [ master ]
+      branches:
+         - "*"
   pull_request:
-      branches: [ master ]
-
+      branches: 
+         - "*"
 env:
   # secrets can be set in settings/secrets on github
   DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -47,7 +48,7 @@ jobs:
       - name: set owner variable
         run: echo "OWNER=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
       - name: set docker image tag
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         run: echo "DOCKER_IMAGE_TAG=${GITHUB_REF##*/}-${{ matrix.python }}" >> $GITHUB_ENV
       - name: set dev environs
         run: make devenv
@@ -59,12 +60,12 @@ jobs:
           make info-build
       - name: test
         run: make tests
-      - if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         name: deploy
         run: |
           ./ci/helpers/dockerhub_login.bash
           make push
-      - if: github.event_name == 'push' && github.ref != 'refs/heads/master'
+      - if: github.event_name == 'push' && github.ref != 'refs/heads/main'
         name: deploy
         run: |
           ./ci/helpers/dockerhub_login.bash
