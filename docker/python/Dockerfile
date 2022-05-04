@@ -5,6 +5,7 @@ FROM stanfordnmbl/opensim-python as base
 #     docker build -f Dockerfile -t opensim-python-runner:prod --target production ../../
 #     docker run opensim-python-runner:prod
 #
+#
 
 LABEL maintainer=iavarone
 
