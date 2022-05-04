@@ -6,7 +6,7 @@ services:
           "iavarone@itis.swiss", "affiliation": "IT''IS Foundation"}]}'
         io.simcore.contact: '{"contact": "iavarone@itis.swiss"}'
         io.simcore.description: '{"description": "OpenSim Python Runner, for modeling
-          and simulating the neuromusculoskeletal system."}'
+          and simulating the neuromusculoskeletal system"}'
         io.simcore.inputs: '{"inputs": {"input_1": {"displayOrder": 1, "label": "Input
           data", "description": "Any code, requirements or data file", "type": "data:*/*"},
           "input_2": {"displayOrder": 2, "label": "Additional input data - optional",
