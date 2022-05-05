@@ -4,6 +4,3 @@ scipy
 pandas
 matplotlib
 seaborn
-
-# tools
-pipreqs
