@@ -7,6 +7,7 @@ import sys
 import tempfile
 import zipfile
 from pathlib import Path
+from typing import Optional
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("osparc-python-main")
@@ -56,8 +57,7 @@ def unzip_dir(parent: Path):
 
 
 def zipdir(dirpath: Path, ziph: zipfile.ZipFile):
-    """ Zips directory and archives files relative to dirpath
-    """
+    """Zips directory and archives files relative to dirpath"""
     for root, dirs, files in os.walk(dirpath):
         for filename in files:
             filepath = os.path.join(root, filename)
@@ -82,24 +82,14 @@ def ensure_main_entrypoint(code_dir: Path) -> Path:
     return main_py
 
 
-def ensure_requirements(code_dir: Path) -> Path:
+def search_requirements(code_dir: Path) -> Optional[Path]:
     requirements = list(code_dir.rglob("requirements.txt"))
-    if len(requirements) > 1:
-        raise ValueError(f"Many requirements found: {requirements}")
-    elif not requirements:
-        #deduce requirements using pipreqs
-        #logger.info("Not found. Recreating requirements ...")
-        logger.info("No requirements.txt found, creating an empty one.")
-        requirements = code_dir / "requirements.txt"
-        #run_cmd(f"pipreqs --savepath={requirements} --force {code_dir}")
-        
-        # Create empty requirements file, cannot use pipreqs because opensim is not available on PyPi
-        open(requirements, 'w').close()
-        # TODO log subprocess.run
-
-    else:
-        requirements = requirements[0]
-    return requirements
+    if requirements:
+        if len(requirements) == 1:
+            return requirements[0]
+        else:
+            raise ValueError(f" {len(requirements)} requirements found: {requirements}")
+    return None
 
 
 def setup():
@@ -123,10 +113,12 @@ def setup():
     logger.info("Found %s as main entrypoint", main_py)
 
     logger.info("Searching requirements ...")
-    requirements_txt = ensure_requirements(input_dir)
+    
+    requirements_txt = search_requirements(input_dir)
 
     logger.info("Preparing launch script ...")
     venv_dir = Path.home() / ".venv"
+
     script = [
         "#!/bin/sh",
         "set -o errexit",
@@ -135,11 +127,18 @@ def setup():
         'echo "Creating virtual environment ..."',
         f'python3.8 -m venv --system-site-packages --symlinks --upgrade "{venv_dir}"',
         f'"{venv_dir}/bin/pip" install -U pip wheel setuptools',
-        f'"{venv_dir}/bin/pip" install -r "{requirements_txt}"',
+    ]
+    
+    if requirements_txt:
+        script.append(f'"{venv_dir}/bin/pip" install -r "{requirements_txt}"')
+    
+    script.extend(
+        [
         f'echo "Executing code {main_py.name}..."',
         f'"{venv_dir}/bin/python3.8" "{main_py}"',
         'echo "DONE ..."',
-    ]
+        ]
+    )
     main_script_path = Path("main.sh")
     with main_script_path.open("w") as fp:
         for line in script:
